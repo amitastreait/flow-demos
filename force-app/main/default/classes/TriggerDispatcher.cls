@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Amit Singh
  * @group             :
- * @last modified on  : 12-09-2021
+ * @last modified on  : 12-11-2021
  * @last modified by  : Amit Singh
  * Modifications Log
  * Ver   Date         Author       Modification
@@ -34,7 +34,6 @@ public with sharing class TriggerDispatcher {
     private static void filterRecords(TriggerInterface handler, TriggerContext tc){
         List<sObject> filteredRecords = new List<sObject>();
         filteredRecords = (List<sObject>)handler.filterRecords(tc);
-        System.debug(' filteredRecords \n '+ filteredRecords);
         // Call the execute method which will call the execute method of the Actual Handler Class
         execute(filteredRecords, handler, tc);
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-
 	<types>
 		<members>*</members>
 		<name>CustomMetadata</name>
@@ -9,40 +8,21 @@
 		<members>Student__c</members>
 		<name>CustomObject</name>
 	</types>
-	<!--<types>
-		<members>*</members>
-		<name>ApexClass</name>
+	<types>
+		<members>Auto_Assign_Permission_Set_to_user</members>
+		<members>Created_Student_Record</members>
+		<members>RT_Auto_Convert_Lead</members>
+		<members>Subflow_Clone_Group_Member_Record</members>
+		<members>Clone_PermissionSetLicenseAssign_Records</members>
+		<name>Flow</name>
 	</types>
 	<types>
-		<members>*</members>
-		<name>ApexComponent</name>
+		<members>Auto_Assign_Permission_Set_to_user</members>
+		<members>Created_Student_Record</members>
+		<members>RT_Auto_Convert_Lead</members>
+		<members>Subflow_Clone_Group_Member_Record</members>
+		<members>Clone_PermissionSetLicenseAssign_Records</members>
+		<name>FlowDefinition</name>
 	</types>
-	<types>
-		<members>*</members>
-		<name>ApexPage</name>
-	</types>
-	<types>
-		<members>*</members>
-		<name>ApexTestSuite</name>
-	</types>
-	<types>
-		<members>*</members>
-		<name>ApexTrigger</name>
-	</types>
-	<types>
-		<members>*</members>
-		<name>AuraDefinitionBundle</name>
-	</types>
-		<types>
-			<members>*</members>
-			<name>FlowDefinition</name>
-		</types><types>
-		<members>*</members>
-		<name>LightningComponentBundle</name>
-	</types>
-	<types>
-		<members>*</members>
-		<name>StaticResource</name>
-	</types> -->
 	<version>53.0</version>
 </Package>
