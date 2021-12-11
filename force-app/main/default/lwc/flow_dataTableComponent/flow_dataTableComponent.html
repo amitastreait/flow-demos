@@ -1,0 +1,21 @@
+<!-- sldsValidatorIgnore -->
+<!--
+  @description       :
+  @author            : Amit Singh
+  @group             :
+  @last modified on  : 11-03-2021
+  @last modified by  : Amit Singh
+-->
+<template>
+  <lightning-spinner alternative-text="Loading" size="small" variant="brand" if:true={isSpinner}></lightning-spinner>
+  <c-do-pagination if:true={dataList}
+    records={dataList}
+    show-table="true"
+    columns={columnsList}
+    max-row-selection={maxNoOfRecordsToSelect}
+    recordsperpage={recordPerPage}
+    onactions={handleRowActions}
+    onpagination={handlePagination}>
+  </c-do-pagination>
+
+</template>

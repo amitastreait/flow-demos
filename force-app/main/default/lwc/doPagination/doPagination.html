@@ -1,0 +1,103 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<!--
+    @File Name          : pagination.html
+    @Description        :
+    @Author             : Amit Singh (SFDCPanther)
+    @Group              :
+    @Last Modified By   : Amit Singh
+    @Last Modified On   : 11-03-2021
+    @Modification Log   :
+    Ver       Date            Author      		    Modification
+    1.0    5/21/2020   Amit Singh (SFDCPanther)     Initial Version
+-->
+<template>
+    <div class="slds-m-aroung_small slds-align_absolute-center">
+        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="small"></lightning-spinner>
+        <div slot="actions">
+            <lightning-button
+                variant="neutral"
+                title="first"
+                label="First"
+                class="slds-float_left"
+                icon-name="utility:chevronleft"
+                icon-position="left"
+                onclick={handleClick}
+            ></lightning-button>
+        &nbsp;
+            <lightning-button
+                variant="neutral"
+                title="previous"
+                class="slds-float_left"
+                label="Previous"
+                icon-name="utility:chevronleft"
+                icon-position="left"
+                onclick={handleClick}
+            ></lightning-button>
+        <template if:true={pagelinks}>
+            <lightning-button-group>
+                <template for:each={pagelinks} for:item="page">
+                <lightning-button
+                    key={page}
+                    label={page}
+                    onclick={handlePage}
+                ></lightning-button>
+                </template>
+            </lightning-button-group>
+        </template>
+            <lightning-button
+                variant="neutral"
+                title="next"
+                class="slds-float_right"
+                label="Next"
+                icon-name="utility:chevronright"
+                icon-position="right"
+                onclick={handleClick}
+            ></lightning-button>
+            &nbsp;
+            <lightning-button
+                variant="neutral"
+                title="last"
+                class="slds-float_right"
+                label="Last"
+                icon-name="utility:chevronright"
+                icon-position="right"
+                onclick={handleClick}
+            ></lightning-button>
+        </div>
+    </div>
+    <div class="slds-m-top_small"></div>
+        <h2
+        class="slds-m-aroung_small slds-align_absolute-center"
+        style="color: firebrick;"
+        >
+        Displaying Page No:
+        <strong>&nbsp;{pageNo}/{totalPages}&nbsp;</strong>and displaying records&nbsp;
+        <template if:true={end}>
+            from {endRecord}/{totalRecords}
+        </template>
+        <template if:false={end}>
+            from ({startRecord}-{endRecord})/{totalRecords}
+        </template>
+        </h2>
+    <div class="slds-m-top_small"></div>
+        <div class="slds-m-aroung_small">
+        <template if:true={showTable}>
+            <lightning-datatable
+                key-field="Id"
+                data={recordsToDisplay}
+                show-row-number-column
+                columns={columns}
+                max-row-selection={maxRowSelection}
+                onrowaction={handleRowAction}
+                default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={onHandleSort}
+                onsave={handleSave}
+                draft-values={draftValues}
+            >
+            </lightning-datatable>
+        </template>
+    </div>
+</template>

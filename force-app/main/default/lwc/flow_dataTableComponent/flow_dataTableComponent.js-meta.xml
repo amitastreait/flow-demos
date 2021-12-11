@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DataTable Component</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <!-- Configuring the design attributes -->
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+
+            <propertyType name="T" extends="SObject" label="Select Object to Display" description="Generic sObject data type used for input sObject properties" />
+
+            <property name="objectAPIName" type="String" label="The Object API Name to display the records." required="true" default="Account" role="inputOnly" />
+            <property name="orderByField" type="String" label="The field API Name for Sorting."
+                      required="true" default="CreatedDate"
+                      role="inputOnly" datasource="ASC,DESC" />
+            <property name="orderByDirection" type="String" label="The Sort Direction" required="true" default="DESC" role="inputOnly" />
+            <property name="maxNoOfRecordsToSelect" type="Integer"
+                      label="Max No of Records to Select."
+                      description="Max No of Records to Select."
+                      required="true" default="1"
+                      role="inputOnly" />
+            <property name="recordPerPage" type="Integer"
+                      label="Max No of Records Show in a Page."
+                      description="Max No of Records Show in a Page"
+                      required="true" default="10"
+                      role="inputOnly" />
+            <property name="noOfRecordsToReturn" type="Integer"
+                      label="Max No of Records to Return from Apex."
+                      description="Max No of Records to Return from Apex."
+                      required="true" default="10" role="inputOnly" />
+
+            <property name="recordId" type="String"
+                      label="Id to Filter the Records"
+                      description="The Value to filter the record so that you get the certain set of records"
+                      role="inputOnly" />
+            <property name="fieldToFilter" type="String"
+                      label="Field API Name to Filter the Records"
+                      description="Field API Name to Filter the Records. For Examole, AccountId"
+                      role="inputOnly" />
+
+            <property name="fieldsToDisplay" type="String" label="Table header fields"
+                      description="Provide the Field API Name Comma Separated to display as table header"
+                      required="true"
+                      default="Name, Industry, Rating, Parent.Name"
+                      role="inputOnly" />
+            <property name="fieldsToLink" type="String" label="Display Link"
+                      default="Name"
+                      description="Provide the filed API Name comma separated which needs to be enabled as link. Please note the field must be present in query"
+                      role="inputOnly" />
+
+            <property label="Give you the list of All the Selected Records of the selected object" name="allSelectedRecords" role="outputOnly" type="{T[]}" />
+            <property label="Give you the first Selected Records of the selected object" name="firstSelectedRecord" role="outputOnly" type="{T}" />
+            <property name="firstSelectRowId" type="String" label="Gives You the Id of the first Selected Row" role="outputOnly" />
+            <property name="allSelectedRecordIds" type="String[]" label="Gives You the list of Id of all the selected Selected Row" role="outputOnly" />
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

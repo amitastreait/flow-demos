@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Five Rating Component</masterLabel>
+    <description>Five Rating Component</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <!-- Configuring the design attributes -->
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="value" type="String" label="The actual rating between 1-5"/>
+            <property name="readOnly" type="Boolean" label="Indicated either read only or editable" role="inputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
