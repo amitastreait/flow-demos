@@ -1,151 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <actionCalls>
-        <name>Post_to_Chatter</name>
-        <label>Post to Chatter</label>
-        <locationX>314</locationX>
-        <locationY>1367</locationY>
-        <actionName>chatterPost</actionName>
-        <actionType>chatterPost</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>text</name>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>subjectNameOrId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
     <apiVersion>53.0</apiVersion>
-    <assignments>
-        <name>Add_PSA_to_List</name>
-        <label>Add PSA to List</label>
-        <locationX>314</locationX>
-        <locationY>935</locationY>
-        <assignmentItems>
-            <assignToReference>varPermissionSetAssignmentList</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>varPermissionSetAssignment</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_through_PSA_Records</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Prepare_PSA</name>
-        <label>Prepare PSA</label>
-        <locationX>314</locationX>
-        <locationY>815</locationY>
-        <assignmentItems>
-            <assignToReference>varPermissionSetAssignment.AssigneeId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varPermissionSetAssignment.PermissionSetId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_through_PSA_Records.PermissionSetId</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>varPermissionSetAssignment.IsActive</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_PSA_to_List</targetReference>
-        </connector>
-    </assignments>
     <decisions>
-        <name>Check_if_PermissionSet_is_Valid</name>
-        <label>Check if PermissionSet is Valid?</label>
-        <locationX>226</locationX>
-        <locationY>695</locationY>
-        <defaultConnector>
-            <targetReference>Prepare_PSA</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Valid?</defaultConnectorLabel>
-        <rules>
-            <name>NotValid</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_through_PSA_Records.PermissionSet.Name</leftValueReference>
-                <operator>StartsWith</operator>
-                <rightValue>
-                    <stringValue>00e</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Loop_through_PSA_Records.PermissionSet.Label</leftValueReference>
-                <operator>StartsWith</operator>
-                <rightValue>
-                    <stringValue>00e</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Loop_through_PSA_Records.PermissionSet.Label</leftValueReference>
-                <operator>StartsWith</operator>
-                <rightValue>
-                    <stringValue>X00e</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Loop_through_PSA_Records</targetReference>
-            </connector>
-            <label>Not Valid?</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>dcnPSAFound</name>
-        <label>Check if PSA Found?</label>
-        <locationX>314</locationX>
-        <locationY>455</locationY>
+        <name>Check_if_Cloned_From_is_Changed_from_Blank_to_Not_Blank</name>
+        <label>Check if Cloned From is Changed from Blank to Not Blank</label>
+        <locationX>380</locationX>
+        <locationY>335</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>PSA_Found</name>
+            <name>Changed_to_Not_Blank</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>grPASs</leftValueReference>
+                <leftValueReference>$Record.ClonedFrom__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record__Prior.ClonedFrom__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ClonedFrom__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.ClonedFrom__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>Loop_through_PSA_Records</targetReference>
+                <targetReference>Check_if_PermissionSet_s_Group_Needs_to_be_Cloned</targetReference>
             </connector>
-            <label>PSA Found?</label>
+            <label>Changed to Not Blank</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_PermissionSet_s_Group_Needs_to_be_Cloned</name>
+        <label>Check if PermissionSet(s)Group Needs to be Cloned</label>
+        <locationX>182</locationX>
+        <locationY>455</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_Queue_Group_Member_Needs_to_Cloned</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Clone</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ClonePermissionSetGroup__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Subflow_Clone_PermissionSet_s_Groups</targetReference>
+            </connector>
+            <label>Clone?</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_PSLA_Needs_to_be_Cloned</name>
+        <label>Check if PSLA Needs to be Cloned?</label>
+        <locationX>182</locationX>
+        <locationY>1127</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Clone_PSLA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ClonePermissionSetLicence__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Subflow_Clone_PermissionSetLicenseAssign_Record</targetReference>
+            </connector>
+            <label>Clone PSLA</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Queue_Group_Member_Needs_to_Cloned</name>
+        <label>Check if Queue/Group Member Needs to Cloned?</label>
+        <locationX>182</locationX>
+        <locationY>791</locationY>
+        <defaultConnector>
+            <targetReference>Check_if_PSLA_Needs_to_be_Cloned</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Cloned_Group_Queue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CloneGroupQueueMembers__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Subflow_Clone_Queue_Group_Member_Record</targetReference>
+            </connector>
+            <label>Cloned Group/Queue</label>
         </rules>
     </decisions>
     <interviewLabel>RT: Auto Assign Permission Set to user {!$Flow.CurrentDateTime}</interviewLabel>
     <label>RT: Auto Assign Permission Set to user</label>
-    <loops>
-        <name>Loop_through_PSA_Records</name>
-        <label>Loop through PSA Records</label>
-        <locationX>50</locationX>
-        <locationY>575</locationY>
-        <collectionReference>grPASs</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Check_if_PermissionSet_is_Valid</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>crPSA</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -165,45 +130,11 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordCreates>
-        <name>crPSA</name>
-        <label>Insert PSA</label>
-        <locationX>50</locationX>
-        <locationY>1247</locationY>
-        <connector>
-            <targetReference>CloneQueueGroupMemberRecord</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Post_to_Chatter</targetReference>
-        </faultConnector>
-        <inputReference>varPermissionSetAssignmentList</inputReference>
-    </recordCreates>
-    <recordLookups>
-        <name>grPASs</name>
-        <label>SOQL All PSA Related to Cloned From User</label>
-        <locationX>314</locationX>
-        <locationY>335</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>dcnPSAFound</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>AssigneeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>$Record.ClonedFrom__c</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>PermissionSetAssignment</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <start>
-        <locationX>188</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>grPASs</targetReference>
+            <targetReference>Check_if_Cloned_From_is_Changed_from_Blank_to_Not_Blank</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -213,23 +144,48 @@
                 <booleanValue>true</booleanValue>
             </value>
         </filters>
-        <filters>
-            <field>ClonedFrom__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
         <object>User</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
-        <name>CloneQueueGroupMemberRecord</name>
+        <name>Subflow_Clone_PermissionSet_s_Groups</name>
+        <label>Subflow: Clone PermissionSet(s)/Groups</label>
+        <locationX>50</locationX>
+        <locationY>575</locationY>
+        <connector>
+            <targetReference>Check_if_Queue_Group_Member_Needs_to_Cloned</targetReference>
+        </connector>
+        <flowName>Clone_PermissionSet_s_Groups</flowName>
+        <inputAssignments>
+            <name>varUserRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Subflow_Clone_PermissionSetLicenseAssign_Record</name>
+        <label>Subflow: Clone PermissionSetLicenseAssign Records</label>
+        <locationX>50</locationX>
+        <locationY>1247</locationY>
+        <flowName>Clone_PermissionSetLicenseAssign_Records</flowName>
+        <inputAssignments>
+            <name>varUserRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Subflow_Clone_Queue_Group_Member_Record</name>
         <label>Subflow: Clone Queue/Group Member Record</label>
         <locationX>50</locationX>
-        <locationY>1367</locationY>
+        <locationY>911</locationY>
+        <connector>
+            <targetReference>Check_if_PSLA_Needs_to_be_Cloned</targetReference>
+        </connector>
         <flowName>Subflow_Clone_Group_Member_Record</flowName>
         <inputAssignments>
             <name>varUserRecord</name>

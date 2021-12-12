@@ -5,6 +5,10 @@
 		<name>CustomMetadata</name>
 	</types>
 	<types>
+		<members>cloning</members>
+		<name>StaticResource</name>
+	</types>
+	<types>
 		<members>Student__c</members>
 		<name>CustomObject</name>
 	</types>
@@ -14,15 +18,9 @@
 		<members>RT_Auto_Convert_Lead</members>
 		<members>Subflow_Clone_Group_Member_Record</members>
 		<members>Clone_PermissionSetLicenseAssign_Records</members>
+		<members>Clone_PermissionSet_s_Groups</members>
+		<members>Screen_Clone_Existing_Users</members>
 		<name>Flow</name>
-	</types>
-	<types>
-		<members>Auto_Assign_Permission_Set_to_user</members>
-		<members>Created_Student_Record</members>
-		<members>RT_Auto_Convert_Lead</members>
-		<members>Subflow_Clone_Group_Member_Record</members>
-		<members>Clone_PermissionSetLicenseAssign_Records</members>
-		<name>FlowDefinition</name>
 	</types>
 	<version>53.0</version>
 </Package>
